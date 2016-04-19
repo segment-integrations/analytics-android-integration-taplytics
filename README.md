@@ -1,10 +1,10 @@
-analytics-android-integration-mixpanel
+analytics-android-integration-taplytics
 ======================================
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.segment.analytics.android.integrations/mixpanel/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.segment.analytics.android.integrations/mixpanel)
-[![Javadocs](http://javadoc-badge.appspot.com/com.segment.analytics.android.integrations/mixpanel.svg?label=javadoc)](http://javadoc-badge.appspot.com/com.segment.analytics.android.integrations/mixpanel)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.segment.analytics.android.integrations/taplytics/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.segment.analytics.android.integrations/taplytics)
+[![Javadocs](http://javadoc-badge.appspot.com/com.segment.analytics.android.integrations/taplytics.svg?label=javadoc)](http://javadoc-badge.appspot.com/com.segment.analytics.android.integrations/taplytics)
 
-Mixpanel integration for [analytics-android](https://github.com/segmentio/analytics-android).
+Taplytics integration for [analytics-android](https://github.com/segmentio/analytics-android).
 
 ## License
 
