@@ -34,7 +34,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest(Taplytics.class)
 public class TaplyticsTest {
 
-    @Rule
+  @Rule
     public PowerMockRule rule = new PowerMockRule();
     @Mock
     Application context;
@@ -48,11 +48,11 @@ public class TaplyticsTest {
     public void setUp() {
         initMocks(this);
         mockStatic(Taplytics.class);
-        when(analytics.getApplication()).thenReturn(context);
+        logger = Logger.with(Analytics.LogLevel.DEBUG);
         when(analytics.logger("Taplytics")).thenReturn(logger);
+      when(analytics.getApplication()).thenReturn(context);
 
         integration = new TaplyticsIntegration(analytics, new ValueMap().putValue("apiKey", "foo"));
-        mockStatic(Taplytics.class);
     }
 
     @Test
@@ -66,8 +66,6 @@ public class TaplyticsTest {
 
         verifyStatic();
         //Integration initialized
-        Taplytics.startTaplytics(context, "foo");
-        verifyStatic();
         //Make sure settings are set correctly
         assertThat(integration.liveUpdate).isTrue();
     }

@@ -21,6 +21,7 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     };
     private static final String TAPLYTICS_KEY = "Taplytics";
     final Logger logger;
+    String apiKey;
     boolean liveUpdate;
 
     TaplyticsIntegration(Analytics analytics, ValueMap settings){
