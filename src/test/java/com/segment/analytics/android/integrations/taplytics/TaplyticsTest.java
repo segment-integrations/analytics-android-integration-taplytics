@@ -1,26 +1,11 @@
 package com.segment.analytics.android.integrations.taplytics;
 
-import android.app.Activity;
 import android.app.Application;
-import android.os.Bundle;
 import com.segment.analytics.Analytics;
-import com.segment.analytics.Properties;
-import com.segment.analytics.Traits;
 import com.segment.analytics.ValueMap;
-import com.segment.analytics.android.integrations.taplytics.BuildConfig;
 import com.segment.analytics.integrations.Logger;
-import com.segment.analytics.test.AliasPayloadBuilder;
-import com.segment.analytics.test.IdentifyPayloadBuilder;
-import com.segment.analytics.test.ScreenPayloadBuilder;
-import com.segment.analytics.test.TrackPayloadBuilder;
 import com.taplytics.sdk.Taplytics;
 
-import java.util.Arrays;
-import java.util.Collections;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,14 +20,11 @@ import org.robolectric.annotation.Config;
 import static com.segment.analytics.Utils.createTraits;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.verifyNoMoreInteractions;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -52,15 +34,15 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest(Taplytics.class)
 public class TaplyticsTest {
 
-    @Rule
+  @Rule
     public PowerMockRule rule = new PowerMockRule();
     @Mock
     Application context;
     Logger logger;
     @Mock
     Analytics analytics;
-
     TaplyticsIntegration integration;
+    Taplytics taplytics;
 
     @Before
     public void setUp() {
@@ -68,15 +50,17 @@ public class TaplyticsTest {
         mockStatic(Taplytics.class);
         logger = Logger.with(Analytics.LogLevel.DEBUG);
         when(analytics.logger("Taplytics")).thenReturn(logger);
-        when(analytics.getApplication()).thenReturn(context);
+      when(analytics.getApplication()).thenReturn(context);
 
-
-        integration = new TaplyticsIntegration(analytics, new ValueMap());
+        integration = new TaplyticsIntegration(analytics, new ValueMap().putValue("apiKey", "foo"));
     }
 
     @Test
     public void factory() {
-        ValueMap settings = new ValueMap().putValue("token", "foo");
+        ValueMap settings = new ValueMap() //
+            .putValue("apiKey", "foo")
+            .putValue("liveUpdate", true)
+            .putValue("sessionMinutes", 20);
 
         TaplyticsIntegration integration =
                 (TaplyticsIntegration) TaplyticsIntegration.FACTORY.create(settings, analytics);
@@ -84,6 +68,7 @@ public class TaplyticsTest {
         verifyStatic();
         //Integration initialized
         //Make sure settings are set correctly
-        Taplytics.startTaplytics(context, "YOUR TAPLYTICS API KEY");
+        assertThat(integration.liveUpdate).isTrue();
+        assertThat(integration.sessionMinutes).isEqualTo(20);
     }
 }

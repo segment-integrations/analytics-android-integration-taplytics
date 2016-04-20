@@ -3,6 +3,7 @@ package com.segment.analytics.android.integrations.taplytics;
 import com.segment.analytics.Analytics;
 import com.segment.analytics.ValueMap;
 import com.segment.analytics.integrations.Integration;
+import com.segment.analytics.integrations.Logger;
 import com.taplytics.sdk.Taplytics;
 
 /**
@@ -19,5 +20,19 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
         }
     };
     private static final String TAPLYTICS_KEY = "Taplytics";
-    public TaplyticsIntegration(Analytics analytics, ValueMap settings){}
+    final Logger logger;
+    String apiKey;
+    boolean liveUpdate;
+    int sessionMinutes;
+
+    TaplyticsIntegration(Analytics analytics, ValueMap settings){
+      logger = analytics.logger(TAPLYTICS_KEY);
+
+      String apiKey = settings.getString("apiKey");
+      liveUpdate = settings.getBoolean("liveUpdate", true);
+      sessionMinutes = settings.getInt("sessionMinutes", 10);
+
+      Taplytics.startTaplytics(analytics.getApplication(), apiKey);
+      logger.verbose("Taplytics.startTaplytics(analytics.getApplication(), %s)", apiKey);
+    }
 };
