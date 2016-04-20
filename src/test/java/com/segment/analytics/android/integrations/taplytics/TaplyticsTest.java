@@ -103,8 +103,15 @@ public class TaplyticsTest {
       verify(taplytics).logEvent(eq("foo"), eq(0.0), jsonEq(new JSONObject()));
     }
 
+    @Test public void trackWithValue() {
+      integration.track(new TrackPayloadBuilder().event("foo")
+          .properties(new Properties().putValue(20.0))
+          .build());
 
-    private void verifyNoMoreTaplyticsInteractions() {
+      verify(taplytics).logEvent(eq("foo"), eq(20.0), jsonEq(new JSONObject()));
+    }
+
+  private void verifyNoMoreTaplyticsInteractions() {
       verifyNoMoreInteractions(Taplytics.class);
       verifyNoMoreInteractions(taplytics);
     }
