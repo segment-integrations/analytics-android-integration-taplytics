@@ -28,9 +28,9 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
       logger = analytics.logger(TAPLYTICS_KEY);
 
       String apiKey = settings.getString("apiKey");
-      boolean liveUpdate = settings.getBoolean("liveUpdate", true);
+      liveUpdate = settings.getBoolean("liveUpdate", true);
 
       Taplytics.startTaplytics(analytics.getApplication(), apiKey);
-      logger.verbose("Taplytics.startTaplytics - (%s)", apiKey);
+      logger.verbose("Taplytics.startTaplytics(analytics.getApplication(), %s)", apiKey);
     }
 };
