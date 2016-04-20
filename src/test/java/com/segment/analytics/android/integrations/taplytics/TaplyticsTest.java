@@ -59,7 +59,8 @@ public class TaplyticsTest {
     public void factory() {
         ValueMap settings = new ValueMap() //
             .putValue("apiKey", "foo")
-            .putValue("liveUpdate", true);
+            .putValue("liveUpdate", true)
+            .putValue("sessionMinutes", 20);
 
         TaplyticsIntegration integration =
                 (TaplyticsIntegration) TaplyticsIntegration.FACTORY.create(settings, analytics);
@@ -68,5 +69,6 @@ public class TaplyticsTest {
         //Integration initialized
         //Make sure settings are set correctly
         assertThat(integration.liveUpdate).isTrue();
+        assertThat(integration.sessionMinutes).isEqualTo(20);
     }
 }

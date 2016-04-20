@@ -23,12 +23,14 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     final Logger logger;
     String apiKey;
     boolean liveUpdate;
+    int sessionMinutes;
 
     TaplyticsIntegration(Analytics analytics, ValueMap settings){
       logger = analytics.logger(TAPLYTICS_KEY);
 
       String apiKey = settings.getString("apiKey");
       liveUpdate = settings.getBoolean("liveUpdate", true);
+      sessionMinutes = settings.getInt("sessionMinutes", 10);
 
       Taplytics.startTaplytics(analytics.getApplication(), apiKey);
       logger.verbose("Taplytics.startTaplytics(analytics.getApplication(), %s)", apiKey);
