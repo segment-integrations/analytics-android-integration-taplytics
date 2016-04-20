@@ -1,11 +1,19 @@
 package com.segment.analytics.android.integrations.taplytics;
 
+import android.app.Activity;
 import android.app.Application;
+import android.os.Bundle;
 import com.segment.analytics.Analytics;
+import com.segment.analytics.Properties;
 import com.segment.analytics.ValueMap;
 import com.segment.analytics.integrations.Logger;
+import com.segment.analytics.integrations.TrackPayload;
+import com.segment.analytics.test.TrackPayloadBuilder;
 import com.taplytics.sdk.Taplytics;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,8 +28,10 @@ import org.robolectric.annotation.Config;
 import static com.segment.analytics.Utils.createTraits;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -42,7 +52,7 @@ public class TaplyticsTest {
     @Mock
     Analytics analytics;
     TaplyticsIntegration integration;
-    Taplytics taplytics;
+    @Mock Taplytics taplytics;
 
     @Before
     public void setUp() {
@@ -50,7 +60,7 @@ public class TaplyticsTest {
         mockStatic(Taplytics.class);
         logger = Logger.with(Analytics.LogLevel.DEBUG);
         when(analytics.logger("Taplytics")).thenReturn(logger);
-      when(analytics.getApplication()).thenReturn(context);
+        when(analytics.getApplication()).thenReturn(context);
 
         integration = new TaplyticsIntegration(analytics, new ValueMap().putValue("apiKey", "foo"));
     }
@@ -85,5 +95,38 @@ public class TaplyticsTest {
       //Make sure settings are set correctly
       assertThat(integration.liveUpdate).isTrue();
       assertThat(integration.sessionMinutes).isEqualTo(10);
+    }
+
+    @Test public void track() {
+      integration.track(new TrackPayloadBuilder().event("foo").build());
+
+      verify(taplytics).logEvent(eq("foo"), eq(0.0), jsonEq(new JSONObject()));
+    }
+
+
+    private void verifyNoMoreTaplyticsInteractions() {
+      verifyNoMoreInteractions(Taplytics.class);
+      verifyNoMoreInteractions(taplytics);
+    }
+
+    public static JSONObject jsonEq(JSONObject expected) {
+      return argThat(new JSONObjectMatcher(expected));
+    }
+
+    private static class JSONObjectMatcher extends TypeSafeMatcher<JSONObject> {
+      private final JSONObject expected;
+
+      private JSONObjectMatcher(JSONObject expected) {
+        this.expected = expected;
+      }
+
+      @Override public boolean matchesSafely(JSONObject jsonObject) {
+        // todo: this relies on having the same order
+        return expected.toString().equals(jsonObject.toString());
+      }
+
+      @Override public void describeTo(Description description) {
+        description.appendText(expected.toString());
+      }
     }
 }
