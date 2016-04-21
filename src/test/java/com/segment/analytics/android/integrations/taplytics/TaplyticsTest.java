@@ -109,12 +109,18 @@ public class TaplyticsTest {
   }
 
   @Test public void identify() throws JSONException {
-    Traits traits = createTraits("foo").putValue("anonymousId", "foobar");
+    Traits traits = createTraits("foo") //
+        .putValue("anonymousId", "foobar")
+        .putValue("firstName","Kylo")
+        .putValue("lastName", "Ren");
+
     integration.identify(new IdentifyPayloadBuilder().traits(traits).build());
 
     JSONObject attributes = new JSONObject();
     attributes.put("user_id", "foo");
     attributes.put("anonymousId", "foobar");
+    attributes.put("firstname", "Kylo");
+    attributes.put("lastname", "Ren");
 
     verifyStatic();
     Taplytics.setUserAttributes(jsonEq(attributes));
