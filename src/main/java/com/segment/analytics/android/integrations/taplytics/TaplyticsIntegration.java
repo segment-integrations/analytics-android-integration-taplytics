@@ -69,5 +69,9 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     JSONObject propertiesJSON = properties.toJsonObject();
     Taplytics.logEvent(name, properties.value(), propertiesJSON);
     // if revenue, logRevenue
+    int revenue = (int) properties.revenue();
+    if (revenue != 0) {
+      Taplytics.logRevenue(name, revenue, propertiesJSON);
+    }
   }
 };

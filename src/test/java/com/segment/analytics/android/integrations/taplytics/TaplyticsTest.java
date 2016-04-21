@@ -76,8 +76,6 @@ public class TaplyticsTest {
     TaplyticsIntegration integration =
         (TaplyticsIntegration) TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
-    //Integration initialized
-    //Make sure settings are set correctly
     assertThat(integration.liveUpdate).isFalse();
     assertThat(integration.sessionMinutes).isEqualTo(20);
   }
@@ -97,6 +95,7 @@ public class TaplyticsTest {
 
   @Test public void track() {
     integration.track(new TrackPayloadBuilder().event("foo").build());
+
     verifyStatic();
     Taplytics.logEvent(eq("foo"), eq(0.0), jsonEq(new JSONObject()));
   }
@@ -105,7 +104,24 @@ public class TaplyticsTest {
     integration.track(new TrackPayloadBuilder().event("foo")
         .properties(new Properties().putValue(20.0))
         .build());
-    Taplytics.logEvent(eq("foo"), eq(20.0), jsonEq(new JSONObject()));
+
+    Properties expected = new Properties().putValue(20.0);
+
+    verifyStatic();
+    Taplytics.logEvent(eq("foo"), eq(20.0), jsonEq(expected.toJsonObject()));
+  }
+
+  @Test public void trackWithRevenue() {
+    integration.track(new TrackPayloadBuilder().event("foo")
+        .properties(new Properties().putValue(20.0).putRevenue(1000.0))
+        .build());
+
+    Properties expected = new Properties().putValue(20.0).putRevenue(1000.0);
+    verifyStatic();
+    Taplytics.logEvent(eq("foo"), eq(20.0), jsonEq(expected.toJsonObject()));
+
+    verifyStatic();
+    Taplytics.logRevenue(eq("foo"), eq(1000), jsonEq(expected.toJsonObject()));
   }
 
   @Test public void identify() throws JSONException {
