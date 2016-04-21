@@ -93,6 +93,45 @@ public class TaplyticsTest {
     assertThat(integration.sessionMinutes).isEqualTo(10);
   }
 
+  @Test public void activityCreate() {
+    Activity activity = mock(Activity.class);
+    Bundle bundle = mock(Bundle.class);
+    integration.onActivityCreated(activity, bundle);
+    verifyStatic();
+    Taplytics.startTaplytics(analytics.getApplication(), "foo");
+  }
+
+  @Test public void activityStart() {
+    Activity activity = mock(Activity.class);
+    integration.onActivityStarted(activity);
+  }
+
+  @Test public void activityResume() {
+    Activity activity = mock(Activity.class);
+    integration.onActivityResumed(activity);
+  }
+
+  @Test public void activityPause() {
+    Activity activity = mock(Activity.class);
+    integration.onActivityPaused(activity);
+  }
+
+  @Test public void activityStop() {
+    Activity activity = mock(Activity.class);
+    integration.onActivityStopped(activity);
+  }
+
+  @Test public void activitySaveInstance() {
+    Activity activity = mock(Activity.class);
+    Bundle bundle = mock(Bundle.class);
+    integration.onActivitySaveInstanceState(activity, bundle);
+  }
+
+  @Test public void activityDestroy() {
+    Activity activity = mock(Activity.class);
+    integration.onActivityDestroyed(activity);
+  }
+
   @Test public void track() {
     integration.track(new TrackPayloadBuilder().event("foo").build());
 
