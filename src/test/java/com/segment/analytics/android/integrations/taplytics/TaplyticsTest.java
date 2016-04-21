@@ -97,33 +97,29 @@ public class TaplyticsTest {
 
   @Test public void track() {
     integration.track(new TrackPayloadBuilder().event("foo").build());
-    verify(taplytics).logEvent(eq("foo"), eq(0.0), jsonEq(new JSONObject()));
+    verifyStatic();
+    Taplytics.logEvent(eq("foo"), eq(0.0), jsonEq(new JSONObject()));
   }
 
   @Test public void trackWithValue() {
     integration.track(new TrackPayloadBuilder().event("foo")
         .properties(new Properties().putValue(20.0))
         .build());
-    verify(taplytics).logEvent(eq("foo"), eq(20.0), jsonEq(new JSONObject()));
+    Taplytics.logEvent(eq("foo"), eq(20.0), jsonEq(new JSONObject()));
   }
 
   @Test public void identify() throws JSONException {
-    Traits traits = createTraits("foo");
+    Traits traits = createTraits("foo").putValue("anonymousId", "foobar");
     integration.identify(new IdentifyPayloadBuilder().traits(traits).build());
 
     JSONObject attributes = new JSONObject();
     attributes.put("user_id", "foo");
+    attributes.put("anonymousId", "foobar");
 
     verifyStatic();
-    verify(taplytics).setUserAttributes(attributes);
-
+    Taplytics.setUserAttributes(jsonEq(attributes));
   }
 
-
-  private void verifyNoMoreTaplyticsInteractions() {
-      verifyNoMoreInteractions(Taplytics.class);
-      verifyNoMoreInteractions(taplytics);
-    }
 
   public static JSONObject jsonEq(JSONObject expected) {
     return argThat(new JSONObjectMatcher(expected));
