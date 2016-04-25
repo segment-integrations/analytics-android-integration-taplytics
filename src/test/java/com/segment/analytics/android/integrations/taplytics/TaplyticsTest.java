@@ -8,11 +8,9 @@ import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
 import com.segment.analytics.ValueMap;
 import com.segment.analytics.integrations.Logger;
-import com.segment.analytics.integrations.TrackPayload;
 import com.segment.analytics.test.IdentifyPayloadBuilder;
 import com.segment.analytics.test.TrackPayloadBuilder;
 import com.taplytics.sdk.Taplytics;
-
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.json.JSONException;
@@ -30,11 +28,8 @@ import org.robolectric.annotation.Config;
 
 import static com.segment.analytics.Utils.createTraits;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -43,22 +38,17 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 18, manifest = Config.NONE)
-@PowerMockIgnore({"org.mockito.*", "org.robolectric.*", "android.*", "org.json.*"})
-@PrepareForTest(Taplytics.class)
-public class TaplyticsTest {
+@PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*", "org.json.*" })
+@PrepareForTest(Taplytics.class) public class TaplyticsTest {
 
-  @Rule
-  public PowerMockRule rule = new PowerMockRule();
-  @Mock
-  Application context;
+  @Rule public PowerMockRule rule = new PowerMockRule();
+  @Mock Application context;
   Logger logger;
-  @Mock
-  Analytics analytics;
+  @Mock Analytics analytics;
   TaplyticsIntegration integration;
   @Mock Taplytics taplytics;
 
-  @Before
-  public void setUp() {
+  @Before public void setUp() {
     initMocks(this);
     mockStatic(Taplytics.class);
     logger = Logger.with(Analytics.LogLevel.DEBUG);
@@ -67,12 +57,9 @@ public class TaplyticsTest {
     integration = new TaplyticsIntegration(analytics, new ValueMap().putValue("apiKey", "foo"));
   }
 
-  @Test
-  public void factory() {
+  @Test public void factory() {
     ValueMap settings = new ValueMap() //
-        .putValue("apiKey", "foo")
-        .putValue("liveUpdate", false)
-        .putValue("sessionMinutes", 20);
+        .putValue("apiKey", "foo").putValue("liveUpdate", false).putValue("sessionMinutes", 20);
     TaplyticsIntegration integration =
         (TaplyticsIntegration) TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
@@ -80,8 +67,7 @@ public class TaplyticsTest {
     assertThat(integration.sessionMinutes).isEqualTo(20);
   }
 
-  @Test
-  public void initializeWithDefaultArguments() {
+  @Test public void initializeWithDefaultArguments() {
     ValueMap settings = new ValueMap() //
         .putValue("apiKey", "foo");
     TaplyticsIntegration integration =
@@ -140,9 +126,8 @@ public class TaplyticsTest {
   }
 
   @Test public void trackWithValue() {
-    integration.track(new TrackPayloadBuilder().event("foo")
-        .properties(new Properties().putValue(20.0))
-        .build());
+    integration.track(
+        new TrackPayloadBuilder().event("foo").properties(new Properties().putValue(20.0)).build());
 
     Properties expected = new Properties().putValue(20.0);
 
@@ -166,7 +151,7 @@ public class TaplyticsTest {
   @Test public void identify() throws JSONException {
     Traits traits = createTraits("foo") //
         .putValue("anonymousId", "foobar")
-        .putValue("firstName","Kylo")
+        .putValue("firstName", "Kylo")
         .putValue("lastName", "Ren");
 
     integration.identify(new IdentifyPayloadBuilder().traits(traits).build());
@@ -181,13 +166,13 @@ public class TaplyticsTest {
     Taplytics.setUserAttributes(jsonEq(attributes));
   }
 
-
   public static JSONObject jsonEq(JSONObject expected) {
     return argThat(new JSONObjectMatcher(expected));
   }
 
   private static class JSONObjectMatcher extends TypeSafeMatcher<JSONObject> {
     private final JSONObject expected;
+
     private JSONObjectMatcher(JSONObject expected) {
       this.expected = expected;
     }
