@@ -142,9 +142,6 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
     Properties expected = new Properties().putValue(20.0).putRevenue(1000.0);
     verifyStatic();
-    Taplytics.logEvent(eq("foo"), eq(20.0), jsonEq(expected.toJsonObject()));
-
-    verifyStatic();
     Taplytics.logRevenue(eq("foo"), eq(1000), jsonEq(expected.toJsonObject()));
   }
 

@@ -69,13 +69,13 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
 
   private void event(String name, Properties properties) {
     JSONObject propertiesJSON = properties.toJsonObject();
-    Taplytics.logEvent(name, properties.value(), propertiesJSON);
-    logger.verbose("Taplytics.logEvent(%s, %s, %s)", name, properties.value(), propertiesJSON);
-    // if revenue, logRevenue
     int revenue = (int) properties.revenue();
     if (revenue != 0) {
       Taplytics.logRevenue(name, revenue, propertiesJSON);
       logger.verbose("Taplytics.logRevenue(%s, %s, %s)", name, revenue, propertiesJSON);
+      return;
     }
+    Taplytics.logEvent(name, properties.value(), propertiesJSON);
+    logger.verbose("Taplytics.logEvent(%s, %s, %s)", name, properties.value(), propertiesJSON);
   }
 };
