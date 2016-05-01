@@ -9,6 +9,7 @@ import com.segment.analytics.integrations.Logger;
 import com.segment.analytics.integrations.TrackPayload;
 import com.taplytics.sdk.Taplytics;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.json.JSONObject;
@@ -44,15 +45,24 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
   final Logger logger;
   String apiKey;
   boolean liveUpdate;
+  boolean shakeMenu;
+  boolean turnMenu;
   int sessionMinutes;
 
   TaplyticsIntegration(Analytics analytics, ValueMap settings) {
     logger = analytics.logger(TAPLYTICS_KEY);
     String apiKey = settings.getString("apiKey");
     liveUpdate = settings.getBoolean("liveUpdate", true);
+    shakeMenu = settings.getBoolean("shakeMenu", true);
+    turnMenu = settings.getBoolean("turnMenu", false);
     sessionMinutes = settings.getInt("sessionMinutes", 10);
-    Taplytics.startTaplytics(analytics.getApplication(), apiKey);
-    logger.verbose("Taplytics.startTaplytics(analytics.getApplication(), %s)", apiKey);
+    HashMap<String, Object> options = new HashMap<>();
+    options.put("liveUpdate", liveUpdate);
+    options.put("shakeMenu", shakeMenu);
+    options.put("turnMenu", turnMenu);
+    options.put("sessionMinutes", sessionMinutes);
+    Taplytics.startTaplytics(analytics.getApplication(), apiKey, options);
+    logger.verbose("Taplytics.startTaplytics(analytics.getApplication(), %s, %s)", apiKey, options);
   }
 
   @Override public void track(TrackPayload track) {

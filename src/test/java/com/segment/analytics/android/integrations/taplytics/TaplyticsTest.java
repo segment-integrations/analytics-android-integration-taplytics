@@ -80,11 +80,12 @@ import static org.powermock.api.mockito.PowerMockito.when;
   }
 
   @Test public void activityCreate() {
+    ValueMap settings = new ValueMap().putValue("turnMenu", false).putValue("sessionMinutes", 10).putValue("liveUpdate", true).putValue("shakeMenu", true);
     Activity activity = mock(Activity.class);
     Bundle bundle = mock(Bundle.class);
     integration.onActivityCreated(activity, bundle);
     verifyStatic();
-    Taplytics.startTaplytics(analytics.getApplication(), "foo");
+    Taplytics.startTaplytics(analytics.getApplication(), "foo", settings);
   }
 
   @Test public void activityStart() {
