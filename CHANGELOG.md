@@ -1,4 +1,11 @@
 
+
+Version 0.3.0 (2nd May, 2016)
+===================================
+*(Supports analytics-android 4.0.+ and Taplytics 1.7.+)*
+
+  * Removing unnecessary Volley dep
+
 Version 0.2.0 (1st May, 2016)
 ===================================
 *(Supports analytics-android 4.0.+ and Taplytics 1.7.+)*
