@@ -45,9 +45,6 @@ dependencies {
 
   provided 'com.segment.analytics.android:analytics:4.0.0'
 
-  //Dependencies for taplytics
-  compile("com.mcxiaoke.volley:library:+")
-
   //Taplytics
   compile('com.taplytics.sdk:taplytics:1.7.0')
 
