@@ -47,7 +47,7 @@ dependencies {
 
   //Taplytics
   compile('com.taplytics.sdk:taplytics:1.9.6')
-  compile 'com.android.volley:volley:+'
+  compile 'com.android.volley:volley:1.0.1'
 
   testCompile 'junit:junit:4.12'
   testCompile('org.robolectric:robolectric:3.0') {
