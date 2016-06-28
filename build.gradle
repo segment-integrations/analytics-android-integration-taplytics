@@ -39,14 +39,15 @@ checkstyle {
 
 dependencies {
   repositories {
-    mavenCentral()
+    jcenter()
     maven { url "https://github.com/taplytics/Taplytics-Android-SDK/raw/master/AndroidStudio/" }
   }
 
   provided 'com.segment.analytics.android:analytics:4.0.0'
 
   //Taplytics
-  compile('com.taplytics.sdk:taplytics:1.7.0')
+  compile('com.taplytics.sdk:taplytics:1.9.6')
+  compile 'com.android.volley:volley:1.0.0'
 
   testCompile 'junit:junit:4.12'
   testCompile('org.robolectric:robolectric:3.0') {
