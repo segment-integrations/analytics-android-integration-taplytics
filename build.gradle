@@ -39,7 +39,7 @@ checkstyle {
 
 dependencies {
   repositories {
-    mavenCentral()
+    jcenter()
     maven { url "https://github.com/taplytics/Taplytics-Android-SDK/raw/master/AndroidStudio/" }
   }
 
