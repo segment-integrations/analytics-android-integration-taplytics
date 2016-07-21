@@ -61,6 +61,7 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     options.put("shakeMenu", shakeMenu);
     options.put("turnMenu", turnMenu);
     options.put("sessionMinutes", sessionMinutes);
+    options.put("delayedStartTaplytics", true);
     Taplytics.startTaplytics(analytics.getApplication(), apiKey, options);
     logger.verbose("Taplytics.startTaplytics(analytics.getApplication(), %s, %s)", apiKey, options);
   }
