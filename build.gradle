@@ -46,7 +46,7 @@ dependencies {
   provided 'com.segment.analytics.android:analytics:4.0.0'
 
   //Taplytics
-  compile('com.taplytics.sdk:taplytics:1.9.13')
+  compile('com.taplytics.sdk:taplytics:1.10.0')
   compile 'com.android.volley:volley:1.0.0'
 
   testCompile 'junit:junit:4.12'

@@ -80,7 +80,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
   }
 
   @Test public void activityCreate() {
-    ValueMap settings = new ValueMap().putValue("turnMenu", false).putValue("sessionMinutes", 10).putValue("liveUpdate", true).putValue("shakeMenu", true);
+    ValueMap settings = new ValueMap().putValue("turnMenu", false).putValue("sessionMinutes", 10).putValue("liveUpdate", true).putValue("shakeMenu", true).putValue("delayedStartTaplytics", true);
     Activity activity = mock(Activity.class);
     Bundle bundle = mock(Bundle.class);
     integration.onActivityCreated(activity, bundle);
