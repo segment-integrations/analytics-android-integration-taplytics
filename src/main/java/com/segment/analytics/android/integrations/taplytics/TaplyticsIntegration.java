@@ -39,9 +39,9 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     private static final String TAPLYTICS_OPTION_LIVE_UPDATE = "liveUpdate";
     private static final String TAPLYTICS_OPTION_SHAKE_MENU = "shakeMenu";
     private static final String TAPLYTICS_OPTION_TURN_MENU = "turnMenu";
-    private static final String TAPLYTICS_OPTION_LIVE_UPDATE_V2 = "liveUpdateV2";
-    private static final String TAPLYTICS_OPTION_SHAKE_MENU_V2 = "shakeMenuV2";
-    private static final String TAPLYTICS_OPTION_TURN_MENU_V2 = "turnMenuV2";
+    private static final String TAPLYTICS_OPTION_LIVE_UPDATE_V2 = "liveUpdate_v2";
+    private static final String TAPLYTICS_OPTION_SHAKE_MENU_V2 = "shakeMenu_v2";
+    private static final String TAPLYTICS_OPTION_TURN_MENU_V2 = "turnMenu_v2";
     private static final String TAPLYTICS_OPTION_SESSION_MINUTES = "sessionMinutes";
     private static final String TAPLYTICS_OPTION_DELAYED_START = "delayedStartTaplytics";
 
