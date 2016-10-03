@@ -21,18 +21,26 @@ import static com.segment.analytics.internal.Utils.transform;
  */
 public class TaplyticsIntegration extends Integration<Taplytics> {
   public static final Factory FACTORY = new Factory() {
-    @Override public Integration<?> create(ValueMap settings, Analytics analytics) {
+    @Override
+    public Integration<?> create(ValueMap settings, Analytics analytics) {
       return new TaplyticsIntegration(analytics, settings);
     }
 
-    @Override public String key() {
+    @Override
+    public String key() {
       return TAPLYTICS_KEY;
     }
   };
 
   private static final String TAPLYTICS_KEY = "Taplytics";
+  private static final String TAPLYTICS_KEY_API_KEY = "apiKey";
+  private static final String TAPLYTICS_OPTION_LIVE_UPDATE = "liveUpdate";
+  private static final String TAPLYTICS_OPTION_SHAKE_MENU = "shakeMenu";
+  private static final String TAPLYTICS_OPTION_TURN_MENU = "turnMenu";
+  private static final String TAPLYTICS_OPTION_SESSION_MINUTES = "sessionMinutes";
+  private static final String TAPLYTICS_OPTION_DELAYED_START = "delayedStartTaplytics";
 
-  static final Map<String, String> MAPPER;
+  private static final Map<String, String> MAPPER;
 
   static {
     Map<String, String> mapper = new LinkedHashMap<>();
@@ -42,36 +50,47 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     MAPPER = Collections.unmodifiableMap(mapper);
   }
 
-  final Logger logger;
-  String apiKey;
-  boolean liveUpdate;
-  boolean shakeMenu;
-  boolean turnMenu;
-  int sessionMinutes;
+  private enum TaplyticsValue {
+    DEFAULT(null), ON(true), OFF(false);
+
+    private Boolean value = null;
+
+    TaplyticsValue(Boolean val) {
+      this.value = val;
+    }
+
+    public Boolean getValue() {
+      return value;
+    }
+  }
+
+  private final Logger logger;
 
   TaplyticsIntegration(Analytics analytics, ValueMap settings) {
     logger = analytics.logger(TAPLYTICS_KEY);
-    String apiKey = settings.getString("apiKey");
-    liveUpdate = settings.getBoolean("liveUpdate", true);
-    shakeMenu = settings.getBoolean("shakeMenu", true);
-    turnMenu = settings.getBoolean("turnMenu", false);
-    sessionMinutes = settings.getInt("sessionMinutes", 10);
+    String apiKey = settings.getString(TAPLYTICS_KEY_API_KEY);
+    int liveUpdate = settings.getInt(TAPLYTICS_OPTION_LIVE_UPDATE, TaplyticsValue.DEFAULT.ordinal());
+    int shakeMenu = settings.getInt(TAPLYTICS_OPTION_SHAKE_MENU, 0);
+    int turnMenu = settings.getInt(TAPLYTICS_OPTION_TURN_MENU, 0);
+    int sessionMinutes = settings.getInt(TAPLYTICS_OPTION_SESSION_MINUTES, 10);
     HashMap<String, Object> options = new HashMap<>();
-    options.put("liveUpdate", liveUpdate);
-    options.put("shakeMenu", shakeMenu);
-    options.put("turnMenu", turnMenu);
-    options.put("sessionMinutes", sessionMinutes);
-    options.put("delayedStartTaplytics", true);
+    options.put(TAPLYTICS_OPTION_LIVE_UPDATE, TaplyticsValue.values()[liveUpdate].value);
+    options.put(TAPLYTICS_OPTION_SHAKE_MENU, TaplyticsValue.values()[shakeMenu].value);
+    options.put(TAPLYTICS_OPTION_TURN_MENU, TaplyticsValue.values()[turnMenu].value);
+    options.put(TAPLYTICS_OPTION_SESSION_MINUTES, sessionMinutes);
+    options.put(TAPLYTICS_OPTION_DELAYED_START, true);
     Taplytics.startTaplytics(analytics.getApplication(), apiKey, options);
     logger.verbose("Taplytics.startTaplytics(analytics.getApplication(), %s, %s)", apiKey, options);
   }
 
-  @Override public void track(TrackPayload track) {
+  @Override
+  public void track(TrackPayload track) {
     String event = track.event();
     event(event, track.properties());
   }
 
-  @Override public void identify(IdentifyPayload identify) {
+  @Override
+  public void identify(IdentifyPayload identify) {
     super.identify(identify);
     JSONObject traits = new ValueMap(transform(identify.traits(), MAPPER)).toJsonObject();
     Taplytics.setUserAttributes(traits);
