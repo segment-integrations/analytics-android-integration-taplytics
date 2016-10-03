@@ -51,7 +51,7 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
   }
 
   private enum TaplyticsValue {
-    DEFAULT(null), ON(true), OFF(false);
+    OFF(false), ON(true), DEFAULT(null);
 
     private Boolean value = null;
 
@@ -70,8 +70,8 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     logger = analytics.logger(TAPLYTICS_KEY);
     String apiKey = settings.getString(TAPLYTICS_KEY_API_KEY);
     int liveUpdate = settings.getInt(TAPLYTICS_OPTION_LIVE_UPDATE, TaplyticsValue.DEFAULT.ordinal());
-    int shakeMenu = settings.getInt(TAPLYTICS_OPTION_SHAKE_MENU, 0);
-    int turnMenu = settings.getInt(TAPLYTICS_OPTION_TURN_MENU, 0);
+    int shakeMenu = settings.getInt(TAPLYTICS_OPTION_SHAKE_MENU, TaplyticsValue.DEFAULT.ordinal());
+    int turnMenu = settings.getInt(TAPLYTICS_OPTION_TURN_MENU, TaplyticsValue.DEFAULT.ordinal());
     int sessionMinutes = settings.getInt(TAPLYTICS_OPTION_SESSION_MINUTES, 10);
     HashMap<String, Object> options = new HashMap<>();
     options.put(TAPLYTICS_OPTION_LIVE_UPDATE, TaplyticsValue.values()[liveUpdate].value);
