@@ -9,12 +9,12 @@ import com.segment.analytics.integrations.Logger;
 import com.segment.analytics.integrations.TrackPayload;
 import com.taplytics.sdk.Taplytics;
 
+import org.json.JSONObject;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.json.JSONObject;
 
 import static com.segment.analytics.internal.Utils.transform;
 
@@ -39,11 +39,13 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     private static final String TAPLYTICS_OPTION_LIVE_UPDATE = "liveUpdate";
     private static final String TAPLYTICS_OPTION_SHAKE_MENU = "shakeMenu";
     private static final String TAPLYTICS_OPTION_TURN_MENU = "turnMenu";
-    private static final String TAPLYTICS_OPTION_LIVE_UPDATE_V2 = "liveUpdate_v2";
-    private static final String TAPLYTICS_OPTION_SHAKE_MENU_V2 = "shakeMenu_v2";
-    private static final String TAPLYTICS_OPTION_TURN_MENU_V2 = "turnMenu_v2";
     private static final String TAPLYTICS_OPTION_SESSION_MINUTES = "sessionMinutes";
     private static final String TAPLYTICS_OPTION_DELAYED_START = "delayedStartTaplytics";
+
+     static final int DISABLED = 0;
+     static final int ENABLED = 1;
+     static final int DEFAULT = 2;
+
 
     private static final Map<String, String> MAPPER;
 
@@ -55,33 +57,30 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
         MAPPER = Collections.unmodifiableMap(mapper);
     }
 
-    private enum TaplyticsValue {
-        OFF(false), ON(true), DEFAULT(null);
-
-        private Boolean value = null;
-
-        TaplyticsValue(Boolean val) {
-            this.value = val;
-        }
-
-        public Boolean getValue() {
-            return value;
-        }
-    }
-
     private final Logger logger;
+
+    int liveUpdate;
+    int shakeMenu;
+    int turnMenu;
+    int sessionMinutes;
 
     TaplyticsIntegration(Analytics analytics, ValueMap settings) {
         logger = analytics.logger(TAPLYTICS_KEY);
         String apiKey = settings.getString(TAPLYTICS_KEY_API_KEY);
-        int liveUpdate = settings.getInt(TAPLYTICS_OPTION_LIVE_UPDATE_V2, TaplyticsValue.DEFAULT.ordinal());
-        int shakeMenu = settings.getInt(TAPLYTICS_OPTION_SHAKE_MENU_V2, TaplyticsValue.DEFAULT.ordinal());
-        int turnMenu = settings.getInt(TAPLYTICS_OPTION_TURN_MENU_V2, TaplyticsValue.DEFAULT.ordinal());
-        int sessionMinutes = settings.getInt(TAPLYTICS_OPTION_SESSION_MINUTES, 10);
+        liveUpdate = settings.getInt(TAPLYTICS_OPTION_LIVE_UPDATE, DEFAULT);
+        shakeMenu = settings.getInt(TAPLYTICS_OPTION_SHAKE_MENU, DEFAULT);
+        turnMenu = settings.getInt(TAPLYTICS_OPTION_TURN_MENU, DEFAULT);
+        sessionMinutes = settings.getInt(TAPLYTICS_OPTION_SESSION_MINUTES, 10);
         HashMap<String, Object> options = new HashMap<>();
-        options.put(TAPLYTICS_OPTION_LIVE_UPDATE, TaplyticsValue.values()[liveUpdate].value);
-        options.put(TAPLYTICS_OPTION_SHAKE_MENU, TaplyticsValue.values()[shakeMenu].value);
-        options.put(TAPLYTICS_OPTION_TURN_MENU, TaplyticsValue.values()[turnMenu].value);
+        if (liveUpdate != DEFAULT) {
+            options.put(TAPLYTICS_OPTION_LIVE_UPDATE, liveUpdate != DISABLED);
+        }
+        if (shakeMenu != DEFAULT) {
+            options.put(TAPLYTICS_OPTION_SHAKE_MENU, shakeMenu != DISABLED);
+        }
+        if (turnMenu != DEFAULT) {
+            options.put(TAPLYTICS_OPTION_TURN_MENU, turnMenu != DISABLED);
+        }
         options.put(TAPLYTICS_OPTION_SESSION_MINUTES, sessionMinutes);
         options.put(TAPLYTICS_OPTION_DELAYED_START, true);
         Taplytics.startTaplytics(analytics.getApplication(), apiKey, options);
