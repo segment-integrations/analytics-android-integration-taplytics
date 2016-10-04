@@ -59,11 +59,11 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
   @Test public void factory() {
     ValueMap settings = new ValueMap() //
-        .putValue("apiKey", "foo").putValue("liveUpdate", 2).putValue("sessionMinutes", 20);
+        .putValue("apiKey", "foo").putValue("liveUpdate", TaplyticsIntegration.DEFAULT).putValue("sessionMinutes", 20);
     TaplyticsIntegration integration =
         (TaplyticsIntegration) TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
-    assertThat(integration.liveUpdate).isFalse();
+    assertThat(integration.liveUpdate).isEqualTo(TaplyticsIntegration.DEFAULT);
     assertThat(integration.sessionMinutes).isEqualTo(20);
   }
 
@@ -75,7 +75,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
     verifyStatic();
     //Integration initialized
     //Make sure settings are set correctly
-    assertThat(integration.liveUpdate).isTrue();
+    assertThat(integration.liveUpdate).isEqualTo(TaplyticsIntegration.DEFAULT);
     assertThat(integration.sessionMinutes).isEqualTo(10);
   }
 
