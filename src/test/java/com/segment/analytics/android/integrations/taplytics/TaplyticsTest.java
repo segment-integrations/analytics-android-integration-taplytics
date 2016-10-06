@@ -11,6 +11,8 @@ import com.segment.analytics.integrations.Logger;
 import com.segment.analytics.test.IdentifyPayloadBuilder;
 import com.segment.analytics.test.TrackPayloadBuilder;
 import com.taplytics.sdk.Taplytics;
+import java.util.HashMap;
+import java.util.Map;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.json.JSONException;
@@ -20,6 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
@@ -27,7 +30,6 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import static com.segment.analytics.Utils.createTraits;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -55,68 +57,37 @@ import static org.powermock.api.mockito.PowerMockito.when;
     when(analytics.logger("Taplytics")).thenReturn(logger);
     when(analytics.getApplication()).thenReturn(context);
     integration = new TaplyticsIntegration(analytics, new ValueMap().putValue("apiKey", "foo"));
-  }
-
-  @Test public void factory() {
-    ValueMap settings = new ValueMap() //
-        .putValue("apiKey", "foo").putValue("liveUpdate", false).putValue("sessionMinutes", 20);
-    TaplyticsIntegration integration =
-        (TaplyticsIntegration) TaplyticsIntegration.FACTORY.create(settings, analytics);
-    verifyStatic();
-    assertThat(integration.liveUpdate).isFalse();
-    assertThat(integration.sessionMinutes).isEqualTo(20);
+    mockStatic(Taplytics.class); // reset the mock for verification.
   }
 
   @Test public void initializeWithDefaultArguments() {
     ValueMap settings = new ValueMap() //
         .putValue("apiKey", "foo");
-    TaplyticsIntegration integration =
-        (TaplyticsIntegration) TaplyticsIntegration.FACTORY.create(settings, analytics);
+    TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
-    //Integration initialized
-    //Make sure settings are set correctly
-    assertThat(integration.liveUpdate).isTrue();
-    assertThat(integration.sessionMinutes).isEqualTo(10);
+
+    Map<String, Object> options = new HashMap<>();
+    options.put("sessionMinutes", 10);
+    options.put("delayedStartTaplytics", true);
+    Taplytics.startTaplytics(context, "foo", options);
   }
 
-  @Test public void activityCreate() {
-    ValueMap settings = new ValueMap().putValue("turnMenu", false).putValue("sessionMinutes", 10).putValue("liveUpdate", true).putValue("shakeMenu", true).putValue("delayedStartTaplytics", true);
-    Activity activity = mock(Activity.class);
-    Bundle bundle = mock(Bundle.class);
-    integration.onActivityCreated(activity, bundle);
+  @Test public void initialize() {
+    ValueMap settings = new ValueMap() //
+        .putValue("apiKey", "foo") //
+        .putValue("sessionMinutes", 20)
+        .putValue("liveUpdate_v2", "true") //
+        .putValue("shakeMenu_v2", "false")
+        .putValue("turnMenu_v2", "default");
+    TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
-    Taplytics.startTaplytics(analytics.getApplication(), "foo", settings);
-  }
 
-  @Test public void activityStart() {
-    Activity activity = mock(Activity.class);
-    integration.onActivityStarted(activity);
-  }
-
-  @Test public void activityResume() {
-    Activity activity = mock(Activity.class);
-    integration.onActivityResumed(activity);
-  }
-
-  @Test public void activityPause() {
-    Activity activity = mock(Activity.class);
-    integration.onActivityPaused(activity);
-  }
-
-  @Test public void activityStop() {
-    Activity activity = mock(Activity.class);
-    integration.onActivityStopped(activity);
-  }
-
-  @Test public void activitySaveInstance() {
-    Activity activity = mock(Activity.class);
-    Bundle bundle = mock(Bundle.class);
-    integration.onActivitySaveInstanceState(activity, bundle);
-  }
-
-  @Test public void activityDestroy() {
-    Activity activity = mock(Activity.class);
-    integration.onActivityDestroyed(activity);
+    Map<String, Object> options = new HashMap<>();
+    options.put("liveUpdate", true);
+    options.put("shakeMenu", false);
+    options.put("sessionMinutes", 20);
+    options.put("delayedStartTaplytics", true);
+    Taplytics.startTaplytics(context, "foo", options);
   }
 
   @Test public void track() {

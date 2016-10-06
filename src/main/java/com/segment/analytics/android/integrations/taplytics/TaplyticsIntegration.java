@@ -14,11 +14,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.json.JSONObject;
 
+import static com.segment.analytics.internal.Utils.isNullOrEmpty;
 import static com.segment.analytics.internal.Utils.transform;
 
-/**
- * Created by williamjohnson on 4/19/16.
- */
 public class TaplyticsIntegration extends Integration<Taplytics> {
   public static final Factory FACTORY = new Factory() {
     @Override public Integration<?> create(ValueMap settings, Analytics analytics) {
@@ -43,27 +41,52 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
   }
 
   final Logger logger;
-  String apiKey;
-  boolean liveUpdate;
-  boolean shakeMenu;
-  boolean turnMenu;
-  int sessionMinutes;
 
   TaplyticsIntegration(Analytics analytics, ValueMap settings) {
     logger = analytics.logger(TAPLYTICS_KEY);
     String apiKey = settings.getString("apiKey");
-    liveUpdate = settings.getBoolean("liveUpdate", true);
-    shakeMenu = settings.getBoolean("shakeMenu", true);
-    turnMenu = settings.getBoolean("turnMenu", false);
-    sessionMinutes = settings.getInt("sessionMinutes", 10);
-    HashMap<String, Object> options = new HashMap<>();
-    options.put("liveUpdate", liveUpdate);
-    options.put("shakeMenu", shakeMenu);
-    options.put("turnMenu", turnMenu);
+
+    Map<String, Object> options = new HashMap<>();
+    // v1 of these settings were simply booleans and unable to represent a default value.
+    // v2 uses strings, one of "true", "false" and "default" to represent the 3 options.
+    // the v2 suffix was added to prevent older versions from breaking in the wild
+    // (which were expecting booleans and used hardcoded defaults)
+    putDefaultBooleans(settings, "liveUpdate_v2", options, "liveUpdate");
+    putDefaultBooleans(settings, "shakeMenu_v2", options, "shakeMenu");
+    putDefaultBooleans(settings, "turnMenu_v2", options, "turnMenu");
+    int sessionMinutes = settings.getInt("sessionMinutes", 10);
     options.put("sessionMinutes", sessionMinutes);
     options.put("delayedStartTaplytics", true);
     Taplytics.startTaplytics(analytics.getApplication(), apiKey, options);
     logger.verbose("Taplytics.startTaplytics(analytics.getApplication(), %s, %s)", apiKey, options);
+  }
+
+  /**
+   * Copy an a boolean from {@code settings[settingsKey]} to {@code options[optionsKey]}.
+   * Copies {@code true} for {@code "true"}, {@code false} for {@code "false"} and nothing for
+   * {@code "default"}.
+   *
+   * @param settings Settings dictionary sent by Segment CDN.
+   * @param settingsKey Settings key.
+   * @param options Options dictionary used by Taplytics.
+   * @param optionsKey Options key.
+   */
+  private static void putDefaultBooleans(ValueMap settings, String settingsKey,
+      Map<String, Object> options, String optionsKey) {
+    String val = settings.getString(settingsKey);
+    if (isNullOrEmpty(val)) {
+      return;
+    }
+    switch (val) {
+      case "true":
+        options.put(optionsKey, true);
+        break;
+      case "false":
+        options.put(optionsKey, false);
+        break;
+      default:
+        break;
+    }
   }
 
   @Override public void track(TrackPayload track) {
