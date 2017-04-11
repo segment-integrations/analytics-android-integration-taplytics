@@ -1,8 +1,6 @@
 package com.segment.analytics.android.integrations.taplytics;
 
-import android.app.Activity;
 import android.app.Application;
-import android.os.Bundle;
 import com.segment.analytics.Analytics;
 import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
@@ -12,7 +10,6 @@ import com.segment.analytics.test.IdentifyPayloadBuilder;
 import com.segment.analytics.test.TrackPayloadBuilder;
 import com.taplytics.sdk.Taplytics;
 import java.util.HashMap;
-import java.util.Map;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.json.JSONException;
@@ -22,24 +19,22 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static com.segment.analytics.Utils.createTraits;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
-@RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 18, manifest = Config.NONE)
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest = Config.NONE)
 @PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*", "org.json.*" })
 @PrepareForTest(Taplytics.class) public class TaplyticsTest {
 
@@ -66,7 +61,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
     TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
 
-    Map<String, Object> options = new HashMap<>();
+    HashMap<String, Object> options = new HashMap<>();
     options.put("sessionMinutes", 10);
     options.put("delayedStartTaplytics", true);
     Taplytics.startTaplytics(context, "foo", options);
@@ -82,7 +77,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
     TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
 
-    Map<String, Object> options = new HashMap<>();
+    HashMap<String, Object> options = new HashMap<>();
     options.put("liveUpdate", true);
     options.put("shakeMenu", false);
     options.put("sessionMinutes", 20);
