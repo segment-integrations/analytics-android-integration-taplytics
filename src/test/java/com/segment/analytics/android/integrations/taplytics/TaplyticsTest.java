@@ -1,8 +1,7 @@
 package com.segment.analytics.android.integrations.taplytics;
 
-import android.app.Activity;
 import android.app.Application;
-import android.os.Bundle;
+
 import com.segment.analytics.Analytics;
 import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
@@ -11,8 +10,7 @@ import com.segment.analytics.integrations.Logger;
 import com.segment.analytics.test.IdentifyPayloadBuilder;
 import com.segment.analytics.test.TrackPayloadBuilder;
 import com.taplytics.sdk.Taplytics;
-import java.util.HashMap;
-import java.util.Map;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.json.JSONException;
@@ -22,18 +20,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.HashMap;
+
 import static com.segment.analytics.Utils.createTraits;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -66,23 +64,18 @@ import static org.powermock.api.mockito.PowerMockito.when;
     TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
 
-    Map<String, Object> options = new HashMap<>();
+    HashMap<String, Object> options = new HashMap<>();
     options.put("sessionMinutes", 10);
     options.put("delayedStartTaplytics", true);
     Taplytics.startTaplytics(context, "foo", options);
   }
 
   @Test public void initialize() {
-    ValueMap settings = new ValueMap() //
-        .putValue("apiKey", "foo") //
-        .putValue("sessionMinutes", 20)
-        .putValue("liveUpdate_v2", "true") //
-        .putValue("shakeMenu_v2", "false")
-        .putValue("turnMenu_v2", "default");
+    ValueMap settings = new ValueMap().putValue("apiKey", "foo").putValue("sessionMinutes", 20).putValue("liveUpdate_v2", "true").putValue("shakeMenu_v2", "false").putValue("turnMenu_v2", "default");
     TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
 
-    Map<String, Object> options = new HashMap<>();
+    HashMap<String, Object> options = new HashMap<>();
     options.put("liveUpdate", true);
     options.put("shakeMenu", false);
     options.put("sessionMinutes", 20);

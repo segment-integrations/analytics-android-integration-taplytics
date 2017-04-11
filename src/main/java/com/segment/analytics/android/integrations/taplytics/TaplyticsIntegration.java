@@ -8,11 +8,13 @@ import com.segment.analytics.integrations.Integration;
 import com.segment.analytics.integrations.Logger;
 import com.segment.analytics.integrations.TrackPayload;
 import com.taplytics.sdk.Taplytics;
+
+import org.json.JSONObject;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.json.JSONObject;
 
 import static com.segment.analytics.internal.Utils.isNullOrEmpty;
 import static com.segment.analytics.internal.Utils.transform;
@@ -46,7 +48,7 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     logger = analytics.logger(TAPLYTICS_KEY);
     String apiKey = settings.getString("apiKey");
 
-    Map<String, Object> options = new HashMap<>();
+    HashMap<String, Object> options = new HashMap<>();
     // v1 of these settings were simply booleans and unable to represent a default value.
     // v2 uses strings, one of "true", "false" and "default" to represent the 3 options.
     // the v2 suffix was added to prevent older versions from breaking in the wild
