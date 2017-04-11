@@ -1,3 +1,10 @@
+Version 1.2.0 (11th April, 2017)
+=================================
+*(Supports analytics-android 4.0.+ and Taplytics 1.17.1+)*
+
+  * Update the Taplytics dependency. Previous versions of the integration are incompatible with newer releases of Taplytics as Taplytics has a breaking API change. Similarly, older versions of Taplytics are incompatible with this release.
+
+
 Version 1.1.0 (6th October, 2016)
 =================================
 *(Supports analytics-android 4.0.+ and Taplytics 1.10.2)*
