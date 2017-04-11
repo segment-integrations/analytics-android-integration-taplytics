@@ -71,10 +71,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
   }
 
   @Test public void initialize() {
-    ValueMap settings = new ValueMap() //
-        .putValue("apiKey", "foo") //
-        .putValue("sessionMinutes", 20).putValue("liveUpdate_v2", "true") //
-        .putValue("shakeMenu_v2", "false").putValue("turnMenu_v2", "default");
+    ValueMap settings = new ValueMap().putValue("apiKey", "foo").putValue("sessionMinutes", 20).putValue("liveUpdate_v2", "true").putValue("shakeMenu_v2", "false").putValue("turnMenu_v2", "default");
     TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
 
