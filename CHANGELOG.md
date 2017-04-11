@@ -1,7 +1,13 @@
+Version 1.1.0 (6th October, 2016)
+=================================
+*(Supports analytics-android 4.0.+ and Taplytics 1.10.2)*
+
+  * Update how options are passed to the Taplytics SDK.
+
 Version 1.0.1 (2nd August, 2016)
 ==================================
-*(Supports analytics-android 4.0.+ and Taplytics 1.10.2)* 
- 
+*(Supports analytics-android 4.0.+ and Taplytics 1.10.2)*
+
   * Updates Taplytics dependency.
 
 Version 1.0.0 (27th July, 2016)
