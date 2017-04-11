@@ -60,7 +60,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
   @Test public void initializeWithDefaultArguments() {
     ValueMap settings = new ValueMap() //
-            .putValue("apiKey", "foo");
+        .putValue("apiKey", "foo");
     TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
 
@@ -72,11 +72,9 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
   @Test public void initialize() {
     ValueMap settings = new ValueMap() //
-            .putValue("apiKey", "foo") //
-            .putValue("sessionMinutes", 20)
-            .putValue("liveUpdate_v2", "true") //
-            .putValue("shakeMenu_v2", "false")
-            .putValue("turnMenu_v2", "default");
+        .putValue("apiKey", "foo") //
+        .putValue("sessionMinutes", 20).putValue("liveUpdate_v2", "true") //
+        .putValue("shakeMenu_v2", "false").putValue("turnMenu_v2", "default");
     TaplyticsIntegration.FACTORY.create(settings, analytics);
     verifyStatic();
 
@@ -97,7 +95,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
   @Test public void trackWithValue() {
     integration.track(
-            new TrackPayloadBuilder().event("foo").properties(new Properties().putValue(20.0)).build());
+        new TrackPayloadBuilder().event("foo").properties(new Properties().putValue(20.0)).build());
 
     Properties expected = new Properties().putValue(20.0);
 
@@ -107,8 +105,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
   @Test public void trackWithRevenue() {
     integration.track(new TrackPayloadBuilder().event("foo")
-            .properties(new Properties().putValue(20.0).putRevenue(1000.0))
-            .build());
+        .properties(new Properties().putValue(20.0).putRevenue(1000.0))
+        .build());
 
     Properties expected = new Properties().putValue(20.0).putRevenue(1000.0);
     verifyStatic();
@@ -117,9 +115,9 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
   @Test public void identify() throws JSONException {
     Traits traits = createTraits("foo") //
-            .putValue("anonymousId", "foobar")
-            .putValue("firstName", "Kylo")
-            .putValue("lastName", "Ren");
+        .putValue("anonymousId", "foobar")
+        .putValue("firstName", "Kylo")
+        .putValue("lastName", "Ren");
 
     integration.identify(new IdentifyPayloadBuilder().traits(traits).build());
 
