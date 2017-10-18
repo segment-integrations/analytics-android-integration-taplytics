@@ -28,6 +28,16 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     }
   };
 
+  public static final Factory SKIPINIT = new Factory() {
+    @Override public Integration<?> create(ValueMap settings, Analytics analytics) {
+      return new TaplyticsIntegration(analytics);
+    }
+
+    @Override public String key() {
+      return TAPLYTICS_KEY;
+    }
+  };
+
   private static final String TAPLYTICS_KEY = "Taplytics";
 
   static final Map<String, String> MAPPER;
@@ -43,7 +53,7 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
   final Logger logger;
 
   TaplyticsIntegration(Analytics analytics, ValueMap settings) {
-    logger = analytics.logger(TAPLYTICS_KEY);
+    this.logger = analytics.logger(TAPLYTICS_KEY);
     String apiKey = settings.getString("apiKey");
 
     HashMap<String, Object> options = new HashMap<>();
@@ -59,6 +69,11 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     options.put("delayedStartTaplytics", true);
     Taplytics.startTaplytics(analytics.getApplication(), apiKey, options);
     logger.verbose("Taplytics.startTaplytics(analytics.getApplication(), %s, %s)", apiKey, options);
+  }
+
+  TaplyticsIntegration(Analytics analytics) {
+    this.logger = analytics.logger(TAPLYTICS_KEY);
+    logger.verbose("You have initialized Taplytics synchronously.");
   }
 
   /**
