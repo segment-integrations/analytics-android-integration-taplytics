@@ -18,15 +18,18 @@ import static com.segment.analytics.internal.Utils.isNullOrEmpty;
 import static com.segment.analytics.internal.Utils.transform;
 
 public class TaplyticsIntegration extends Integration<Taplytics> {
-  public static final Factory FACTORY = new Factory() {
-    @Override public Integration<?> create(ValueMap settings, Analytics analytics) {
-      return new TaplyticsIntegration(analytics, settings);
-    }
+  public static final Factory FACTORY =
+      new Factory() {
+        @Override
+        public Integration<?> create(ValueMap settings, Analytics analytics) {
+          return new TaplyticsIntegration(analytics, settings);
+        }
 
-    @Override public String key() {
-      return TAPLYTICS_KEY;
-    }
-  };
+        @Override
+        public String key() {
+          return TAPLYTICS_KEY;
+        }
+      };
 
   private static final String TAPLYTICS_KEY = "Taplytics";
 
@@ -62,17 +65,17 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
   }
 
   /**
-   * Copy an a boolean from {@code settings[settingsKey]} to {@code options[optionsKey]}.
-   * Copies {@code true} for {@code "true"}, {@code false} for {@code "false"} and nothing for
-   * {@code "default"}.
+   * Copy an a boolean from {@code settings[settingsKey]} to {@code options[optionsKey]}. Copies
+   * {@code true} for {@code "true"}, {@code false} for {@code "false"} and nothing for {@code
+   * "default"}.
    *
    * @param settings Settings dictionary sent by Segment CDN.
    * @param settingsKey Settings key.
    * @param options Options dictionary used by Taplytics.
    * @param optionsKey Options key.
    */
-  private static void putDefaultBooleans(ValueMap settings, String settingsKey,
-      Map<String, Object> options, String optionsKey) {
+  private static void putDefaultBooleans(
+      ValueMap settings, String settingsKey, Map<String, Object> options, String optionsKey) {
     String val = settings.getString(settingsKey);
     if (isNullOrEmpty(val)) {
       return;
@@ -89,12 +92,14 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
     }
   }
 
-  @Override public void track(TrackPayload track) {
+  @Override
+  public void track(TrackPayload track) {
     String event = track.event();
     event(event, track.properties());
   }
 
-  @Override public void identify(IdentifyPayload identify) {
+  @Override
+  public void identify(IdentifyPayload identify) {
     super.identify(identify);
     JSONObject traits = new ValueMap(transform(identify.traits(), MAPPER)).toJsonObject();
     Taplytics.setUserAttributes(traits);
