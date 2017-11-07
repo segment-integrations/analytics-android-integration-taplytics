@@ -1,3 +1,10 @@
+Version 1.2.0 (7th November, 2017)
+==================================
+*(Supports analytics-android 4.0.+ and Taplytics 1.21.+)*
+
+  * Bumps Taplytics to 1.21.0
+  * Adds SDK support for Android TV and Fire TV
+
 Version 1.2.0 (11th April, 2017)
 =================================
 *(Supports analytics-android 4.0.+ and Taplytics 1.17.1+)*
