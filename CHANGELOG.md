@@ -1,4 +1,4 @@
-Version 1.2.0 (7th November, 2017)
+Version 1.3.0 (7th November, 2017)
 ==================================
 *(Supports analytics-android 4.0.+ and Taplytics 1.21.+)*
 
