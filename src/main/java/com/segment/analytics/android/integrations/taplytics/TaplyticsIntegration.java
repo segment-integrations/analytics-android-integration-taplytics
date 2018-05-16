@@ -6,6 +6,7 @@ import com.segment.analytics.ValueMap;
 import com.segment.analytics.integrations.IdentifyPayload;
 import com.segment.analytics.integrations.Integration;
 import com.segment.analytics.integrations.Logger;
+import com.segment.analytics.integrations.ScreenPayload;
 import com.segment.analytics.integrations.TrackPayload;
 import com.taplytics.sdk.Taplytics;
 import java.util.Collections;
@@ -32,6 +33,7 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
       };
 
   private static final String TAPLYTICS_KEY = "Taplytics";
+  private static final String SCREEN_EVENT_FORMAT = "Viewed %s screen";
 
   static final Map<String, String> MAPPER;
 
@@ -96,6 +98,12 @@ public class TaplyticsIntegration extends Integration<Taplytics> {
   public void track(TrackPayload track) {
     String event = track.event();
     event(event, track.properties());
+  }
+
+  @Override
+  public void screen(ScreenPayload screen) {
+    String name = String.format(SCREEN_EVENT_FORMAT, screen.name());
+    event(name, screen.properties());
   }
 
   @Override
