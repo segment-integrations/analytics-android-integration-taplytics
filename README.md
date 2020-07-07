@@ -6,6 +6,50 @@ analytics-android-integration-taplytics
 
 Taplytics integration for [analytics-android](https://github.com/segmentio/analytics-android).
 
+## Installation
+
+To install the Segment-Taplytics integration, simply add this line to your gradle file:
+
+```
+compile 'com.segment.analytics.android.integrations:taplytics:+'
+```
+
+## Usage
+
+After adding the dependency, you must register the integration with our SDK.  To do this, import 
+the Taplytics integration:
+
+
+```
+import com.segment.analytics.android.integrations.taplytics.TaplyticsIntegration;
+
+```
+
+And add the following:
+
+```
+analytics = new Analytics.Builder(this, "write_key")
+                .use(TaplyticsIntegration.FACTORY)
+                .build();
+```
+
+## Initializing Taplytics without Segment
+
+If you would like to initialize Taplytics yourself to leverage functionality required on 
+initialization, you can use Taplytics native methods to initialize then use `SKIPINIT` to 
+skip initializing through Segment.
+
+```
+Taplytics.startTaplytics(context, apiKey, options);
+
+analytics = new Analytics.Builder(this, "write_key")
+                .use(TaplyticsIntegration.SKIPINIT)
+                .build();
+```
+
+Please see [our documentation](https://segment.com/docs/destinations/taplytics/) for more information.
+
+
 ## License
 
 ```
